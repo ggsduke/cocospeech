@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ココスピーチ｜日常英会話フレーズ集</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --primary: #4f46e5;
+      --primary-soft: #eef2ff;
+      --woman-bg: #fdf2f8;
+      --woman-border: #fbcfe8;
+      --woman-text: #be185d;
+      --man-bg: #eff6ff;
+      --man-border: #bfdbfe;
+      --man-text: #1d4ed8;
+      --kana-bg: #fefce8;
+      --kana-border: #fef08a;
+      --border: #e2e8f0;
+      --font-scale: 1;
+    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body {
+      margin: 0;
+      padding: 0 0 120px 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px;
+    }
+    .header-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+    .app-title { font-size: 1.15rem; font-weight: 800; margin: 0; color: var(--primary); }
+    .app-sub { font-size: 0.78rem; color: var(--muted); margin: 2px 0 0; }
+    .toggle-group { display: flex; gap: 6px; }
+    .toggle-btn {
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      border-radius: 999px;
+      padding: 5px 11px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .toggle-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .scene-tabs { display: flex; gap: 8px; overflow-x: auto; padding-top: 10px; scrollbar-width: none; }
+    .scene-tabs::-webkit-scrollbar { display: none; }
+    .scene-tab {
+      flex: 0 0 auto;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      border-radius: 12px;
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .scene-tab.active { background: #1e293b; color: #fff; border-color: #1e293b; }
+    main { max-width: 720px; margin: 16px auto 0; padding: 0 14px; }
+    .scene-banner {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    }
+    .scene-badge {
+      display: inline-block;
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 0.75rem;
+      padding: 3px 10px;
+      border-radius: 999px;
+      margin-bottom: 6px;
+    }
+    .scene-heading { margin: 0 0 4px; font-size: 1.2rem; font-weight: 800; }
+    .scene-desc { margin: 0 0 12px; font-size: 0.88rem; color: var(--muted); }
+    .play-all-btn {
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      background: var(--primary);
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 800;
+      padding: 12px 16px;
+      cursor: pointer;
+    }
+    .play-all-btn.playing { background: #dc2626; }
+    .dialogue-card {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: transform 0.12s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .dialogue-card:active { transform: scale(0.99); }
+    .dialogue-card.speaking { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.16); }
+    .speaker-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .speaker-info { display: flex; align-items: center; gap: 8px; }
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 0.85rem;
+      border: 1.5px solid transparent;
+    }
+    .avatar.woman { background: var(--woman-bg); border-color: var(--woman-border); color: var(--woman-text); }
+    .avatar.man { background: var(--man-bg); border-color: var(--man-border); color: var(--man-text); }
+    .speaker-name { font-weight: 800; font-size: 0.9rem; }
+    .listen-chip {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--primary);
+      background: var(--primary-soft);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+    .english-text { font-size: calc(1.12rem * var(--font-scale)); font-weight: 800; color: #0f172a; margin: 4px 0 8px; }
+    .kana-box {
+      background: var(--kana-bg);
+      border: 1px solid var(--kana-border);
+      color: #713f12;
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: calc(0.92rem * var(--font-scale));
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .japanese-text { font-size: calc(0.95rem * var(--font-scale)); color: #334155; margin: 0; }
+    .hidden { display: none !important; }
+    .controls-bar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 30;
+      background: rgba(255, 255, 255, 0.97);
+      backdrop-filter: blur(8px);
+      border-top: 1px solid var(--border);
+      padding: 10px 14px;
+    }
+    .controls-inner { max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px; }
+    .control-line { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+    .control-label { font-size: 0.82rem; font-weight: 800; color: var(--text); }
+    .pill-group { display: flex; gap: 6px; }
+    .pill-btn {
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      border-radius: 8px;
+      padding: 5px 10px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .pill-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .voice-note { font-size: 0.72rem; color: var(--muted); text-align: center; margin-top: 4px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-top">
+      <div>
+        <h1 class="app-title">ココスピーチ</h1>
+        <p class="app-sub">英語をタップすると男女の声で再生されます</p>
+      </div>
+      <div class="toggle-group">
+        <button id="toggleKana" class="toggle-btn active" type="button">カタカナ: ON</button>
+        <button id="toggleJp" class="toggle-btn active" type="button">日本語: ON</button>
+      </div>
+    </div>
+    <div id="sceneTabs" class="scene-tabs"></div>
+  </header>
+
+  <main>
+    <section id="sceneBanner" class="scene-banner"></section>
+    <section id="dialogueList"></section>
+    <p class="voice-note">※端末の音声合成（TTS）を利用しています。無音の場合は消音モードや音量をご確認ください。</p>
+  </main>
+
+  <div class="controls-bar">
+    <div class="controls-inner">
+      <div class="control-line">
+        <span class="control-label">音声スピード</span>
+        <div class="pill-group" id="speedButtons">
+          <button class="pill-btn" data-rate="0.7" type="button">0.7x</button>
+          <button class="pill-btn" data-rate="0.85" type="button">0.85x</button>
+          <button class="pill-btn active" data-rate="1.0" type="button">標準</button>
+          <button class="pill-btn" data-rate="1.2" type="button">1.2x</button>
+        </div>
+      </div>
+      <div class="control-line">
+        <span class="control-label">文字サイズ</span>
+        <div class="pill-group" id="fontButtons">
+          <button class="pill-btn" data-scale="0.88" type="button">小</button>
+          <button class="pill-btn active" data-scale="1" type="button">標準</button>
+          <button class="pill-btn" data-scale="1.18" type="button">大</button>
+          <button class="pill-btn" data-scale="1.35" type="button">特大</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const SCENES = [
+      {
+        id: "cafe",
+        badge: "Scene 1",
+        tab: "カフェで注文",
+        title: "カフェでの注文",
+        desc: "店員さんとの自然なやりとりと、よく使う注文フレーズ",
+        lines: [
+          { speaker: "店員 (Woman)", gender: "woman", en: "Hi there! What can I get started for you today?", kana: "ハイ ゼア！ ワッキャナイ ゲッ スターティッド フォー ユー トゥデイ？", jp: "こんにちは！今日は何からご用意しましょうか？（ご注文はお決まりですか？）" },
+          { speaker: "客 (Man)", gender: "man", en: "Hey! Can I get an iced oat milk latte, please?", kana: "ヘイ！ キャナイ ゲッタン アイスト オートミルク ラテ、プリーズ？", jp: "やあ！アイスオーツミルクラテを1つお願いします。" },
+          { speaker: "店員 (Woman)", gender: "woman", en: "Sure thing. Is that for here or to go?", kana: "シュア シング。 イズ ダッ フォー ヒア オア トゥ ゴー？", jp: "かしこまりました。店内でお召し上がりですか、それともお持ち帰りですか？" },
+          { speaker: "客 (Man)", gender: "man", en: "To go, please. And could I grab a croissant too?", kana: "トゥ ゴー、プリーズ。 アンド クッダイ グラバ クロワッサン トゥー？", jp: "持ち帰りでお願いします。あとクロワッサンももらえますか？" }
+        ]
+      },
+      {
+        id: "weekend",
+        badge: "Scene 2",
+        tab: "週末の雑談",
+        title: "週末の雑談",
+        desc: "友人や同僚との気軽な近況報告と週末のプラン",
+        lines: [
+          { speaker: "友人 (Man)", gender: "man", en: "Hey, how's it going? Long time no see!", kana: "ヘイ、ハウズ イッ ゴーイン？ ロング タイム ノー シー！", jp: "やあ、調子はどう？久しぶりだね！" },
+          { speaker: "友人 (Woman)", gender: "woman", en: "Not too bad! Just busy with work. Any plans this weekend?", kana: "ノット トゥー バッド！ ジャスト ビジー ウィズ ワーク。 エニー プランズ ディス ウィークエンド？", jp: "まあまあかな！仕事がちょっと忙しくて。今週末の予定はある？" },
+          { speaker: "友人 (Man)", gender: "man", en: "I'm thinking of checking out that new taco place downtown.", kana: "アイム シンキング オブ チェッキング アウッ ザッ ニュー タコ プレイス ダウンタウン。", jp: "中心街にできた新しいタコス屋さんに行ってみようかなと思ってるんだ。" },
+          { speaker: "友人 (Woman)", gender: "woman", en: "Oh, count me in! Let me know what time works for you.", kana: "オー、カウン ミー イン！ レット ミー ノー ワッ タイム ワークス フォー ユー。", jp: "おお、私も行く！何時ごろがいいか教えてね。" }
+        ]
+      },
+      {
+        id: "directions",
+        badge: "Scene 3",
+        tab: "道を尋ねる",
+        title: "道を尋ねる",
+        desc: "駅や街中で場所を聞くときの丁寧で自然な表現",
+        lines: [
+          { speaker: "通行人 (Man)", gender: "man", en: "Excuse me, do you happen to know where the station is?", kana: "イクスキューズ ミー、ドゥ ユー ハプン トゥ ノー ウェア ザ ステイション イズ？", jp: "すみません、駅がどこにあるかご存知でしょうか？" },
+          { speaker: "地元民 (Woman)", gender: "woman", en: "Yeah, go straight down this street for two blocks.", kana: "イェア、ゴー ストレート ダウン ディス ストリート フォー トゥー ブロックス。", jp: "ええ、この通りをまっすぐ2ブロック進んでください。" },
+          { speaker: "通行人 (Man)", gender: "man", en: "And then do I turn left or right?", kana: "アンド ゼン ドゥ アイ ターン レフト オア ライッ？", jp: "それから左に曲がりますか、それとも右ですか？" },
+          { speaker: "地元民 (Woman)", gender: "woman", en: "Turn right at the traffic light. You can't miss it!", kana: "ターン ライッ アッ ザ トラフィック ライッ。 ユー キャント ミス イッ！", jp: "信号で右に曲がってください。すぐわかりますよ！" }
+        ]
+      },
+      {
+        id: "requests",
+        badge: "Scene 4",
+        tab: "お願いとお礼",
+        title: "ちょっとしたお願いとお礼",
+        desc: "日常でスマートにお願いしたり、感謝を伝えるフレーズ",
+        lines: [
+          { speaker: "同僚 (Woman)", gender: "woman", en: "Would you mind taking a quick look at this?", kana: "ウッジュ マインド テイキング ア クイック ルック アッ ディス？", jp: "これ、ちょっとサッと見ていただけますか？" },
+          { speaker: "同僚 (Man)", gender: "man", en: "Not at all! What do you need help with?", kana: "ノッ アッ オール！ ワッ ドゥ ユー ニード ヘルプ ウィズ？", jp: "全然いいですよ！どのあたりを手伝いましょうか？" },
+          { speaker: "同僚 (Woman)", gender: "woman", en: "Just making sure the timing sounds natural.", kana: "ジャスト メイキング シュア ザ タイミング サウンズ ナチュラル。", jp: "タイミングや言い回しが自然かどうか確認したくて。" },
+          { speaker: "同僚 (Man)", gender: "man", en: "Sounds super clear to me. You're good to go!", kana: "サウンズ スーパークリア トゥ ミー。 ユア グッド トゥ ゴー！", jp: "すごくわかりやすいと思います。そのままで大丈夫ですよ！" }
+        ]
+      }
+    ];
+
+    let currentSceneIndex = 0;
+    let showKana = true;
+    let showJp = true;
+    let speechRate = 1.0;
+    let isPlayingAll = false;
+    let playAllToken = 0;
+    let availableVoices = [];
+
+    const sceneTabsEl = document.getElementById("sceneTabs");
+    const sceneBannerEl = document.getElementById("sceneBanner");
+    const dialogueListEl = document.getElementById("dialogueList");
+    const toggleKanaBtn = document.getElementById("toggleKana");
+    const toggleJpBtn = document.getElementById("toggleJp");
+
+    function loadVoices() {
+      if (!("speechSynthesis" in window)) return;
+      availableVoices = window.speechSynthesis.getVoices().filter(v => v.lang && v.lang.toLowerCase().startsWith("en"));
+    }
+
+    if ("speechSynthesis" in window) {
+      loadVoices();
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
+
+    function pickVoice(gender) {
+      if (!availableVoices.length) return null;
+      const femaleHints = ["samantha", "victoria", "karen", "moira", "zira", "jenny", "aria", "susan", "google us english", "female"];
+      const maleHints = ["alex", "daniel", "fred", "david", "guy", "ryan", "aaron", "arthur", "male"];
+      const hints = gender === "woman" ? femaleHints : maleHints;
+      for (const h of hints) {
+        const found = availableVoices.find(v => v.name.toLowerCase().includes(h));
+        if (found) return found;
+      }
+      if (availableVoices.length >= 2) {
+        return gender === "woman" ? availableVoices[0] : availableVoices[1];
+      }
+      return availableVoices[0];
+    }
+
+    function clearSpeakingHighlights() {
+      document.querySelectorAll(".dialogue-card.speaking").forEach(el => el.classList.remove("speaking"));
+    }
+
+    function stopSpeech() {
+      playAllToken++;
+      isPlayingAll = false;
+      if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+      clearSpeakingHighlights();
+      updatePlayAllButton();
+    }
+
+    function updatePlayAllButton() {
+      const btn = document.getElementById("playAllBtn");
+      if (!btn) return;
+      btn.textContent = isPlayingAll ? "■ 連続再生を停止" : "▶ 会話を連続再生";
+      btn.classList.toggle("playing", isPlayingAll);
+    }
+
+    function speakLine(line, cardEl, onDone) {
+      if (!("speechSynthesis" in window)) {
+        if (onDone) onDone();
+        return;
+      }
+      window.speechSynthesis.cancel();
+      clearSpeakingHighlights();
+      const utter = new SpeechSynthesisUtterance(line.en);
+      utter.lang = "en-US";
+      utter.rate = speechRate;
+      utter.pitch = line.gender === "woman" ? 1.15 : 0.88;
+      const voice = pickVoice(line.gender);
+      if (voice) utter.voice = voice;
+      utter.onstart = () => { if (cardEl) cardEl.classList.add("speaking"); };
+      utter.onend = () => { if (cardEl) cardEl.classList.remove("speaking"); if (onDone) onDone(); };
+      utter.onerror = () => { if (cardEl) cardEl.classList.remove("speaking"); if (onDone) onDone(); };
+      window.speechSynthesis.speak(utter);
+    }
+
+    async function playAllInScene() {
+      if (isPlayingAll) { stopSpeech(); return; }
+      const token = ++playAllToken;
+      isPlayingAll = true;
+      updatePlayAllButton();
+      const scene = SCENES[currentSceneIndex];
+      const cards = dialogueListEl.querySelectorAll(".dialogue-card");
+      for (let i = 0; i < scene.lines.length; i++) {
+        if (!isPlayingAll || token !== playAllToken) break;
+        const line = scene.lines[i];
+        const card = cards[i];
+        if (card) card.scrollIntoView({ behavior: "smooth", block: "center" });
+        await new Promise(resolve => {
+          speakLine(line, card, () => { setTimeout(resolve, 260); });
+        });
+      }
+      if (token === playAllToken) {
+        isPlayingAll = false;
+        clearSpeakingHighlights();
+        updatePlayAllButton();
+      }
+    }
+
+    function renderTabs() {
+      sceneTabsEl.innerHTML = "";
+      SCENES.forEach((scene, idx) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "scene-tab" + (idx === currentSceneIndex ? " active" : "");
+        btn.textContent = scene.tab;
+        btn.addEventListener("click", () => { stopSpeech(); currentSceneIndex = idx; renderAll(); });
+        sceneTabsEl.appendChild(btn);
+      });
+    }
+
+    function renderScene() {
+      const scene = SCENES[currentSceneIndex];
+      sceneBannerEl.innerHTML = `
+        <span class="scene-badge">${scene.badge}</span>
+        <h2 class="scene-heading">${scene.title}</h2>
+        <p class="scene-desc">${scene.desc}</p>
+        <button id="playAllBtn" class="play-all-btn${isPlayingAll ? " playing" : ""}" type="button">
+          ${isPlayingAll ? "■ 連続再生を停止" : "▶ 会話を連続再生"}
+        </button>
+      `;
+      document.getElementById("playAllBtn").addEventListener("click", playAllInScene);
+      dialogueListEl.innerHTML = "";
+      scene.lines.forEach(line => {
+        const card = document.createElement("article");
+        card.className = "dialogue-card";
+        card.innerHTML = `
+          <div class="speaker-row">
+            <div class="speaker-info">
+              <div class="avatar ${line.gender}">${line.gender === "woman" ? "W" : "M"}</div>
+              <span class="speaker-name">${line.speaker}</span>
+            </div>
+            <span class="listen-chip">🔊 聴く</span>
+          </div>
+          <p class="english-text">${line.en}</p>
+          <div class="kana-box${showKana ? "" : " hidden"}">${line.kana}</div>
+          <p class="japanese-text${showJp ? "" : " hidden"}">${line.jp}</p>
+        `;
+        card.addEventListener("click", () => { stopSpeech(); speakLine(line, card); });
+        dialogueListEl.appendChild(card);
+      });
+    }
+
+    function renderAll() { renderTabs(); renderScene(); }
+
+    toggleKanaBtn.addEventListener("click", () => {
+      showKana = !showKana;
+      toggleKanaBtn.textContent = `カタカナ: ${showKana ? "ON" : "OFF"}`;
+      toggleKanaBtn.classList.toggle("active", showKana);
+      document.querySelectorAll(".kana-box").forEach(el => el.classList.toggle("hidden", !showKana));
+    });
+
+    toggleJpBtn.addEventListener("click", () => {
+      showJp = !showJp;
+      toggleJpBtn.textContent = `日本語: ${showJp ? "ON" : "OFF"}`;
+      toggleJpBtn.classList.toggle("active", showJp);
+      document.querySelectorAll(".japanese-text").forEach(el => el.classList.toggle("hidden", !showJp));
+    });
+
+    document.querySelectorAll("#speedButtons .pill-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("#speedButtons .pill-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        speechRate = parseFloat(btn.dataset.rate);
+      });
+    });
+
+    document.querySelectorAll("#fontButtons .pill-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("#fontButtons .pill-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        document.documentElement.style.setProperty("--font-scale", btn.dataset.scale);
+      });
+    });
+
+    renderAll();
+  </script>
+</body>
+</html>
